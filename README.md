@@ -1,27 +1,29 @@
-# Deploy FastAPI on Render
+# Mugna General AI Training
 
-Use this repo as a template to deploy a Python [FastAPI](https://fastapi.tiangolo.com) service on Render.
+---
 
-See https://render.com/docs/deploy-fastapi or follow the steps below:
+## LangChain RAG AI Application with Vector Database
 
-## Manual Steps
+---
 
-1. You may use this repository directly or [create your own repository from this template](https://github.com/render-examples/fastapi/generate) if you'd like to customize the code.
-2. Create a new Web Service on Render.
-3. Specify the URL to your new repository or this repository.
-4. Render will automatically detect that you are deploying a Python service and use `pip` to download the dependencies.
-5. Specify the following as the Start Command.
+## Installation
 
-    ```shell
-    uvicorn main:app --host 0.0.0.0 --port $PORT
-    ```
+1. Create Python virtual environent:
+`python -m venv venv`
+or
+`python3 -m venv venv`
+<br>
 
-6. Click Create Web Service.
+2. Activate virtual environment:
+`source venv/bin/activate`
+<br>
 
-Or simply click:
+3. Install dependencies:
+`pip install -r requirements.txt`
+or
+`pip install langchain-ollama "langchain-chroma>=0.1.2" langchain-text-splitters langchain-community langgraph
+`
+<br>
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/render-examples/fastapi)
-
-## Thanks
-
-Thanks to [Harish](https://harishgarg.com) for the [inspiration to create a FastAPI quickstart for Render](https://twitter.com/harishkgarg/status/1435084018677010434) and for some sample code!
+4. Run program:
+`python main.py`
