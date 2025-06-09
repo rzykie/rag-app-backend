@@ -15,10 +15,10 @@ services:
     # Give the service more resources, as LLMs are demanding
     plan: standard
     # Attach a persistent disk to store the downloaded models
-    disks:
-      - name: ollama-models
-        mountPath: /root/.ollama
-        sizeGB: 20
+    disk:
+      name: ollama-models
+      mountPath: /root/.ollama
+      sizeGB: 20
     # The script to run on startup to pull your desired model
     startCommand: ./start-ollama.sh
     envVars:
@@ -49,8 +49,6 @@ services:
     # We use the existing Dockerfile for the API
     dockerfilePath: ./Dockerfile
     plan: starter # Can be starter, will scale automatically
-    ports:
-      - "8000:8000"
     envVars:
       # This is the crucial part: we point our API to the private Ollama service
       # Render provides internal DNS, so we can use the service name 'ollama-server'.
