@@ -9,7 +9,7 @@ services:
 
   # 2. The private service for running the Ollama server
   - name: ollama-server
-    type: private
+    type: pserv
     env: docker
     dockerfilePath: ./ollama.Dockerfile
     # Give the service more resources, as LLMs are demanding
@@ -27,7 +27,7 @@ services:
 
   # 3. The Celery worker for background data ingestion
   - name: worker
-    type: worker
+    type: pserv
     env: docker
     dockerfilePath: ./Dockerfile
     plan: starter
