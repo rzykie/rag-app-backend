@@ -6,6 +6,7 @@ services:
   - name: redis
     type: redis
     plan: starter
+    ipAllowList: [] # Allow all private network traffic
 
   # 2. The private service for running the Ollama server
   - name: ollama-server
@@ -20,7 +21,7 @@ services:
       mountPath: /root/.ollama
       sizeGB: 20
     # The script to run on startup to pull your desired model
-    startCommand: ./start-ollama.sh
+    dockerCommand: ./start-ollama.sh
     envVars:
       - key: LANGUAGE_MODEL
         value: qwen3:0.6b
@@ -32,7 +33,7 @@ services:
     dockerfilePath: ./Dockerfile
     plan: starter
     # Command to start the worker and trigger the initial ingestion task
-    startCommand: celery -A celery_app.celery call process_documents && celery -A celery_app.celery worker --loglevel=info
+    dockerCommand: celery -A celery_app.celery call process_documents && celery -A celery_app.celery worker --loglevel=info
     envVars:
       - key: OLLAMA_BASE_URL
         value: http://ollama-server:11434
