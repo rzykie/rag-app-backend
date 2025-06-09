@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+
+# Environment files
+.env
+.env*
+
+# Local database
+chroma_langchain_db/
+
+# IDE settings
+.vscode/
+.idea/ 
