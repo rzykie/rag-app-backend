@@ -2,7 +2,12 @@
 # This file defines the services for the RAG API application on Render.
 
 services:
-  # 1. The private service for running the Ollama server
+  # 1. Redis service for Celery message brokering
+  - name: redis
+    type: redis
+    plan: starter
+
+  # 2. The private service for running the Ollama server
   - name: ollama-server
     type: private
     env: docker
@@ -17,7 +22,24 @@ services:
     # The script to run on startup to pull your desired model
     startCommand: ./start-ollama.sh
 
-  # 2. The public web service for your FastAPI application
+  # 3. The Celery worker for background data ingestion
+  - name: worker
+    type: worker
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    # Command to start the worker and trigger the initial ingestion task
+    startCommand: celery -A celery_app.celery call process_documents && celery -A celery_app.celery worker --loglevel=info
+    envVars:
+      - key: OLLAMA_BASE_URL
+        value: http://ollama-server:11434
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
+
+  # 4. The public web service for your FastAPI application
   - name: api
     type: web
     env: docker
@@ -31,6 +53,11 @@ services:
       # Render provides internal DNS, so we can use the service name 'ollama-server'.
       - key: OLLAMA_BASE_URL
         value: http://ollama-server:11434
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
       # Ensure python buffering is disabled for real-time logging
       - key: PYTHONUNBUFFERED
         value: 1
