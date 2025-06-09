@@ -1,9 +1,36 @@
+# render.yaml
+# This file defines the services for the RAG API application on Render.
+
 services:
-  # A Docker web service
-  - type: web
-    name: rag-app-backend
-    runtime: python
-    plan: free
-    autoDeploy: false
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+  # 1. The private service for running the Ollama server
+  - name: ollama-server
+    type: private
+    env: docker
+    dockerfilePath: ./ollama.Dockerfile
+    # Give the service more resources, as LLMs are demanding
+    plan: standard
+    # Attach a persistent disk to store the downloaded models
+    disks:
+      - name: ollama-models
+        mountPath: /root/.ollama
+        sizeGB: 20
+    # The script to run on startup to pull your desired model
+    startCommand: ./start-ollama.sh
+
+  # 2. The public web service for your FastAPI application
+  - name: api
+    type: web
+    env: docker
+    # We use the existing Dockerfile for the API
+    dockerfilePath: ./Dockerfile
+    plan: starter # Can be starter, will scale automatically
+    ports:
+      - "8000:8000"
+    envVars:
+      # This is the crucial part: we point our API to the private Ollama service
+      # Render provides internal DNS, so we can use the service name 'ollama-server'.
+      - key: OLLAMA_BASE_URL
+        value: http://ollama-server:11434
+      # Ensure python buffering is disabled for real-time logging
+      - key: PYTHONUNBUFFERED
+        value: 1
