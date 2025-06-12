@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     # LLM and Embedding Model Settings
     LANGUAGE_MODEL: str = "qwen3:0.6b"
     EMBEDDING_MODEL: str = "nomic-embed-text"
-    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_BASE_URL: str = "http://127.0.0.1:11434"
 
     # ChromaDB Settings
     PERSIST_DIRECTORY: str = "./chroma_langchain_db"

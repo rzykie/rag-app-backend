@@ -25,5 +25,9 @@ or
 `
 <br>
 
-4. Run program:
+4. Process documents (first time setup):
+`python process_docs_local.py`
+<br>
+
+5. Run program:
 `python main.py`
