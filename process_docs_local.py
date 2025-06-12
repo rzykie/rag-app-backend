@@ -43,13 +43,32 @@ def process_documents_local():
         )
         
         logger.info(f"Loading documents from: {settings.DOCS_PATH}")
+        
+        # Import OCR processing function
+        from pdf_ocr_processor import process_pdf_with_ocr
+        
+        documents = []
+        
+        # Process PDF files with OCR
+        pdf_path = os.path.join(settings.DOCS_PATH, "Company Manual.pdf")
+        if os.path.exists(pdf_path):
+            logger.info(f"Processing PDF with OCR: {pdf_path}")
+            try:
+                pdf_documents = process_pdf_with_ocr(pdf_path)
+                logger.info(f"OCR processing extracted from {len(pdf_documents)} pages")
+                documents.extend(pdf_documents)
+            except Exception as e:
+                logger.error(f"PDF OCR processing failed: {e}")
+        
+        # Load other text files
         loader = DirectoryLoader(
             settings.DOCS_PATH,
-            glob="**/*.*",
+            glob="**/*.txt",  # Only text files, PDFs handled above
             use_multithreading=True,
             show_progress=True,
         )
-        documents = loader.load()
+        text_documents = loader.load()
+        documents.extend(text_documents)
         
         if not documents:
             logger.info("No documents found to process.")
@@ -58,10 +77,10 @@ def process_documents_local():
         logger.info(f"Loaded {len(documents)} documents")
         
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500,     # Smaller chunks for better precision
-            chunk_overlap=100,  # Reduced overlap
+            chunk_size=1000,
+            chunk_overlap=200,
             length_function=len,
-            separators=["\n\n", "\n", ".", "!", "?", ",", " ", ""]  # Better splitting
+            separators=["\n\n", "\n", ". ", "! ", "? ", "; ", ", ", " ", ""]
         )
         
         split_documents = text_splitter.split_documents(documents)

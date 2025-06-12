@@ -64,9 +64,9 @@ class LangChainRAG:
         return vector_store.as_retriever(
             search_type="mmr", 
             search_kwargs={
-                "k": 5,        # Reduce to get more focused results
-                "fetch_k": 20, # Reduce initial fetch
-                "lambda_mult": 0.7  # Balance between relevance and diversity
+                "k": 10,       # Increase to get more results
+                "fetch_k": 40, # Cast a wider net
+                "lambda_mult": 0.5  # More diversity to capture different phrasings
             }
         )
 

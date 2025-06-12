@@ -129,3 +129,10 @@ nomic
 logging
 celery
 redis
+
+# OCR and Computer Vision dependencies for enhanced PDF processing
+pytesseract>=0.3.10
+Pillow>=10.0.0
+opencv-python>=4.8.0
+PyMuPDF>=1.23.0
+pdf2image>=1.16.0
