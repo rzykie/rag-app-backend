@@ -46,6 +46,20 @@ async def query(request: QueryRequest):
     The document ingestion process runs automatically in the background.
     """
     response = rag_app.generate_response(request.query)
+    
+    # Handle structured response with thinking section
+    if isinstance(response, dict):
+        if "thinking" in response and "answer" in response:
+            return {
+                "thinking": response["thinking"],
+                "response": response["answer"]
+            }
+        elif "answer" in response:
+            return {"response": response["answer"]}
+        elif "error" in response:
+            return {"response": response["error"]}
+    
+    # Fallback for string responses
     return {"response": response}
 
 

@@ -39,7 +39,9 @@ class LangChainRAG:
         return ChatOllama(
             model=self.language_model,
             base_url=self.ollama_base_url,
-            temperature=0,
+            temperature=0.1,  # Slightly higher for more natural responses
+            top_p=0.9,        # Nucleus sampling for better quality
+            repeat_penalty=1.1, # Reduce repetition
         )
 
     def _initialize_embeddings(self):
@@ -60,7 +62,12 @@ class LangChainRAG:
             client_settings=ChromaSettings(anonymized_telemetry=False),
         )
         return vector_store.as_retriever(
-            search_type="mmr", search_kwargs={"k": 20, "fetch_k": 50}
+            search_type="mmr", 
+            search_kwargs={
+                "k": 5,        # Reduce to get more focused results
+                "fetch_k": 20, # Reduce initial fetch
+                "lambda_mult": 0.7  # Balance between relevance and diversity
+            }
         )
 
     def _create_rag_chain(self):
@@ -70,11 +77,13 @@ class LangChainRAG:
         Your goal is to help employees by answering their questions based on the official company handbook.
 
         Instructions:
-        1.  Answer the user's question using ONLY the context provided below.
-        2.  Be clear and concise in your response.
-        3.  If the information is a list (e.g., types of leave), use bullet points for readability.
-        4.  If the answer cannot be found in the provided context, respond with: "I'm sorry, but I couldn't find any information about that in the company handbook. Please reach out to HR for more details."
-        5.  Do not make up answers or provide information from outside the context.
+        1. Answer the user's question using ONLY the context provided below.
+        2. Be clear, concise, and professional in your response.
+        3. Use bullet points for lists and organize information logically.
+        4. If you need to reason through the context, you may optionally include your thinking process in <think></think> tags before your main response.
+        5. If the answer cannot be found in the provided context, respond with: "I'm sorry, but I couldn't find any information about that in the company handbook. Please reach out to HR for more details."
+        6. Do not make up answers or provide information from outside the context.
+        7. Provide a direct, helpful answer after any thinking process.
 
         Context:
         {context}
@@ -97,7 +106,28 @@ class LangChainRAG:
         logger.info(f"Generating response for query: {query}")
         try:
             response = self.rag_chain.invoke({"input": query})
-            return response["answer"]
+            raw_answer = response["answer"]
+            
+            # Parse and separate thinking section if present
+            if "<think>" in raw_answer and "</think>" in raw_answer:
+                # Extract thinking section
+                think_start = raw_answer.find("<think>") + 7
+                think_end = raw_answer.find("</think>")
+                thinking_process = raw_answer[think_start:think_end].strip()
+                
+                # Extract main response (everything after </think>)
+                main_response = raw_answer[think_end + 8:].strip()
+                
+                # Structure the response
+                structured_response = {
+                    "thinking": thinking_process,
+                    "answer": main_response
+                }
+                return structured_response
+            else:
+                # No thinking section, return as normal
+                return {"answer": raw_answer}
+                
         except Exception as e:
             logger.error(f"Error response: {str(e)}")
-            return f"Sorry, I encountered an error: {str(e)}"
+            return {"error": f"Sorry, I encountered an error: {str(e)}"}
