@@ -1,0 +1,67 @@
+
+Company Manual - Detailed Overview
+==================================
+
+1. Company Vision and Mission
+-----------------------------
+Mission:
+    - To create solutions and opportunities through the Bayanihan culture.
+      (Bayanihan: a Filipino concept emphasizing community cooperation.)
+
+Vision:
+    - A world where Filipino talents are globally competitive in the field of technology.
+
+2. Leadership
+-------------
+    - John Lorence Lim
+      CEO & Co-Founder
+    
+
+3. Employee Guidelines
+----------------------
+
+A. Work and Leave Policies
+--------------------------
+- Overtime:
+    - Must be performed with prior knowledge of the immediate supervisor.
+    - Needs to be recorded using the Airtable link: https://airtable.com/shrcrqQq7ElPOn7HT
+    - Subject to approval by the HR Officer.
+
+- Leave Filing:
+    - Inform direct supervisor before submitting leave.
+    - Submit leave via the designated Airtable channel.
+    - For emergency/sick leave, a medical certificate must be provided soon after:
+      https://airtable.com/shroR1zFMHtDE4F9W
+
+- Tardiness:
+    - Penalty system in place; one sample value: Tardy 0.50
+
+B. Holiday Policy
+-----------------
+- The company observes regular holidays in the Philippines.
+  (Specific list of holidays not mentioned.)
+
+4. Termination and Resignation
+------------------------------
+- Standard Resignation:
+    - Employees may resign by submitting a written notice at least one (1) month in advance.
+    - Failure to comply incurs liquidated damages of PHP 50,000.
+
+- Immediate Resignation (Just Causes):
+    - Serious insult by employer/representative.
+    - Crime or offense committed by employer/representative.
+    - Inhuman or unbearable treatment.
+    - Other causes analogous to the above.
+    - These cases waive the advance notice requirement.
+
+- Exit Interview:
+    - Conducted immediately upon receipt of resignation.
+    - Purpose: discuss experiences, retrieve company property, and complete exit forms.
+
+5. Additional Notes
+-------------------
+- Multiple sections labeled "Description Responsibilities" and "(Learning)" are mentioned
+  but not elaborated upon.
+- The manual appears to emphasize accountability, respectful treatment, and procedural fairness.
+
+End of Overview

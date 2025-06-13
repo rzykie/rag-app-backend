@@ -1,5 +1,6 @@
 import httpx
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from config import settings
@@ -9,6 +10,15 @@ app = FastAPI(
     title="Company Policy RAG API",
     description="A RAG-based API to answer questions about company policies, with automated data ingestion.",
     version="3.0.0",
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # This initializes the RAG application components without loading documents.
